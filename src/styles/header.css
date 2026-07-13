@@ -1,0 +1,42 @@
+/* ============================================================
+   HEADER + UTILITY BAR
+   Owned by: Person A
+   Imported in: components/Header.jsx
+   ============================================================ */
+
+.util-bar{background:#0b0f14; border-bottom:1px solid rgba(255,255,255,0.06);}
+.util-bar-inner{max-width:1180px; margin:0 auto; display:flex; justify-content:flex-end; gap:22px; padding:7px 24px; flex-wrap:wrap;}
+.util-bar a{font-size:10.5px; letter-spacing:1px; text-transform:uppercase; color:#6b7580; transition:color .15s ease;}
+.util-bar a:hover{color:var(--amber);}
+
+header{position:sticky; top:0; z-index:60; background:var(--ink); border-bottom:1px solid rgba(255,255,255,0.08);}
+.header-inner{max-width:1180px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; padding:14px 24px; gap:20px;}
+.logo-group{display:flex; align-items:center; gap:14px;}
+.logo{display:flex; align-items:baseline; gap:2px; font-family:'Oswald'; font-size:21px; font-weight:700; letter-spacing:1px; color:#fff; text-transform:uppercase;}
+.logo span{color:var(--amber);}
+nav.main-nav{display:flex; gap:26px; transition:opacity .3s ease;}
+nav.main-nav a{font-size:12.5px; letter-spacing:1.5px; text-transform:uppercase; color:#c7ced6; font-weight:500; position:relative; padding:6px 0; transition:color .15s ease;}
+nav.main-nav a:hover{color:#fff;}
+nav.main-nav a.active{color:var(--amber);}
+nav.main-nav a.active::after{content:''; position:absolute; left:0; right:0; bottom:-4px; height:2px; background:var(--amber);}
+.header-right{display:flex; align-items:center; gap:16px;}
+.visitor-count{font-family:'Space Mono'; font-size:10.5px; color:#8a94a0; display:flex; align-items:center; gap:6px; white-space:nowrap; border-left:1px solid rgba(255,255,255,0.12); padding-left:14px;}
+.visitor-count .dot{width:6px;height:6px;border-radius:50%;background:var(--sky); box-shadow:0 0 8px var(--sky);}
+.cta-btn{background:var(--amber); color:var(--ink); font-weight:600; font-size:12.5px; letter-spacing:.5px; padding:9px 18px; border-radius:2px; border:none; transition:background .15s ease; white-space:nowrap;}
+.cta-btn:hover{background:var(--amber-deep);}
+.burger{display:none; background:none; border:none; color:#fff; font-size:20px;}
+
+/* ---------- MOBILE NAV (fade in/out) ---------- */
+@media (max-width:860px){
+  nav.main-nav{
+    display:flex; position:fixed; top:96px; left:0; right:0; bottom:0;
+    background:var(--ink); flex-direction:column; align-items:flex-start;
+    padding:30px 28px; gap:0;
+    opacity:0; pointer-events:none; transform:translateY(-8px);
+    transition:opacity .3s ease, transform .3s ease;
+    z-index:55;
+  }
+  nav.main-nav.menu-open{opacity:1; pointer-events:auto; transform:none;}
+  nav.main-nav a{font-size:16px; padding:14px 0; width:100%; border-bottom:1px solid rgba(255,255,255,0.06);}
+  .burger{display:block;}
+}

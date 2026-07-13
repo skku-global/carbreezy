@@ -1,0 +1,10 @@
+/* ============================================================
+   BRANDS TAB
+   Owned by: Person D
+   Imported in: views/Brands.jsx
+   ============================================================ */
+
+.brand-select-row{display:flex; gap:10px; flex-wrap:wrap; margin-bottom:32px;}
+.brand-btn{background:#fff; border:1px solid var(--paper-dim); padding:12px 22px; font-family:'Oswald'; font-size:13px; letter-spacing:1.5px; color:var(--steel); transition:all .15s ease;}
+.brand-btn:hover{border-color:var(--ink); color:var(--ink);}
+.brand-btn.active{background:var(--ink); color:#fff; border-color:var(--ink);}

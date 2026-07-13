@@ -1,0 +1,21 @@
+/* ============================================================
+   SCROLLING TICKER (date/time/location marquee)
+   Owned by: Person D
+   Imported in: components/Ticker.jsx
+   ============================================================ */
+
+.ticker{position:fixed; bottom:0; left:0; right:0; z-index:70; background:#0b0f14; border-top:1px solid rgba(255,255,255,0.08); overflow:hidden; height:34px; display:flex; align-items:center;}
+.ticker-track{display:flex; white-space:nowrap; animation:tickerScroll 26s linear infinite; will-change:transform;}
+.ticker-track:hover{animation-play-state:paused;}
+.ticker-seg{display:flex; align-items:center; gap:28px; padding-right:28px; color:#c7ced6; font-family:'Space Mono'; font-size:11px;}
+.ticker-seg b{color:var(--amber); font-weight:700;}
+.ticker-seg .sep{color:#3a4450;}
+
+@keyframes tickerScroll{
+  from{transform:translateX(0);}
+  to{transform:translateX(-50%);}
+}
+
+@media (max-width:860px){
+  .ticker{font-size:9.5px; gap:14px;}
+}

@@ -1,0 +1,22 @@
+/* ============================================================
+   GALLERY TAB + LIGHTBOX
+   Owned by: Person C
+   Imported in: views/Gallery.jsx
+   ============================================================ */
+
+.gallery-filter{display:flex; gap:8px; margin-bottom:26px; flex-wrap:wrap;}
+.gallery-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:12px;}
+.gallery-item{aspect-ratio:4/3; background-size:cover; background-position:center; cursor:pointer; position:relative; overflow:hidden;}
+.gallery-item::after{content:''; position:absolute; inset:0; background:rgba(16,21,28,0); transition:background .15s ease;}
+.gallery-item:hover::after{background:rgba(16,21,28,0.25);}
+.gallery-item .label{position:absolute; bottom:8px; left:10px; color:#fff; font-family:'Space Mono'; font-size:10.5px; z-index:1; opacity:0; transition:opacity .15s ease;}
+.gallery-item:hover .label{opacity:1;}
+
+.lightbox{position:fixed; inset:0; background:rgba(10,13,17,0.92); z-index:100; display:none; align-items:center; justify-content:center; padding:30px;}
+.lightbox.open{display:flex;}
+.lightbox img{max-height:82vh; max-width:100%;}
+.lightbox-close{position:absolute; top:22px; right:26px; background:none; border:none; color:#fff; font-size:24px;}
+
+@media (max-width:860px){
+  .gallery-grid{grid-template-columns:repeat(2,1fr);}
+}

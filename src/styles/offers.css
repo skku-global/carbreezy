@@ -1,0 +1,18 @@
+/* ============================================================
+   OFFERS TAB
+   Owned by: Person D
+   Imported in: views/Offers.jsx
+   ============================================================ */
+
+.offer-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:24px;}
+.offer-card{background:var(--ink); color:#fff; padding:24px 22px; position:relative; overflow:hidden;}
+.offer-card::before{content:''; position:absolute; top:0; left:0; width:4px; height:100%; background:var(--amber);}
+.offer-card .pct{font-family:'Space Mono'; font-size:26px; color:var(--amber); font-weight:700; margin-bottom:10px;}
+.offer-card h3{font-family:'Oswald'; font-size:17px; margin-bottom:8px; letter-spacing:.3px;}
+.offer-card p{font-size:12.5px; color:#aab2bc; text-transform:none; margin-bottom:16px; line-height:1.5;}
+.offer-card .expiry{font-family:'Space Mono'; font-size:10.5px; color:#6b7580; margin-bottom:16px;}
+.offer-card .link-car{font-size:11.5px; letter-spacing:1px; text-transform:uppercase; color:var(--sky); border-bottom:1px solid var(--sky); padding-bottom:2px; background:none; border-top:none; border-left:none; border-right:none;}
+
+@media (max-width:860px){
+  .offer-grid{grid-template-columns:1fr;}
+}

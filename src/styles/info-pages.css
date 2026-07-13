@@ -1,0 +1,25 @@
+/* ============================================================
+   INFO PAGES — About Us, Contact Us, Queries, Site Map
+   Owned by: Person A
+   Imported in: views/About.jsx, Contact.jsx, Queries.jsx, Sitemap.jsx
+   ============================================================ */
+
+.info-grid{display:grid; grid-template-columns:1.1fr 0.9fr; gap:50px; align-items:start;}
+.info-grid p{font-size:14.5px; line-height:1.75; color:#3a4450; margin-bottom:16px; text-transform:none;}
+.contact-card{background:#fff; border:1px solid var(--paper-dim); padding:26px;}
+.contact-row{display:flex; gap:14px; padding:14px 0; border-bottom:1px solid var(--paper-dim);}
+.contact-row:last-child{border-bottom:none;}
+.contact-row .ic{font-family:'Space Mono'; font-size:11px; color:var(--amber-deep); letter-spacing:1px; text-transform:uppercase; flex:0 0 90px;}
+.contact-row .val{font-size:14px; color:var(--ink);}
+.query-form{display:flex; flex-direction:column; gap:14px; max-width:480px;}
+.query-form input, .query-form textarea{border:1px solid var(--paper-dim); padding:12px 14px; font-family:inherit; font-size:13.5px; background:#fff; color:var(--ink);}
+.query-form textarea{min-height:110px; resize:vertical;}
+.query-form label{font-size:11.5px; letter-spacing:1px; text-transform:uppercase; color:var(--steel); margin-bottom:-8px;}
+.sitemap-list{columns:2; gap:40px;}
+.sitemap-list a{display:block; padding:9px 0; font-size:14.5px; color:var(--ink); border-bottom:1px solid var(--paper-dim); break-inside:avoid;}
+.sitemap-list a:hover{color:var(--amber-deep);}
+
+@media (max-width:860px){
+  .info-grid{grid-template-columns:1fr;}
+  .sitemap-list{columns:1;}
+}
