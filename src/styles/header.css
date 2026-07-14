@@ -28,6 +28,9 @@ nav.main-nav a.active::after{content:''; position:absolute; left:0; right:0; bot
 
 /* ---------- MOBILE NAV (fade in/out) ---------- */
 @media (max-width:860px){
+  .visitor-count{ display:none; }
+  .header-right{ gap:10px; }
+  .cta-btn{ padding:8px 12px; font-size:11px; }
   nav.main-nav{
     display:flex; position:fixed; top:96px; left:0; right:0; bottom:0;
     background:var(--ink); flex-direction:column; align-items:flex-start;
