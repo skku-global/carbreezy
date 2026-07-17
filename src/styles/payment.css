@@ -1,0 +1,113 @@
+/* ============================================================
+   PAYMENT / RESERVATION MODAL
+   Owned by: Person C
+   Imported in: components/PaymentModal.jsx
+   Signature: "Readiness Gauge" — a radial dial fills in as the reservation
+   form is completed, and the method toggle reuses Listing's gear-gate
+   language, so reserving a car reads as the last instrument on the same
+   dashboard as Home/Listing, not a plain checkout form dropped on top.
+   ============================================================ */
+
+.payment-box{
+  background:linear-gradient(160deg, var(--ink-soft) 0%, var(--ink) 100%);
+  max-width:460px; width:100%; max-height:90vh; overflow-y:auto; position:relative;
+  border-radius:6px; border:1px solid rgba(255,255,255,0.08);
+  box-shadow:0 40px 90px rgba(0,0,0,0.45);
+}
+
+.payment-bolt{
+  position:absolute; width:8px; height:8px; border-radius:50%; z-index:2;
+  background:radial-gradient(circle at 35% 35%, #fff, #7c8792 55%, #10151c 100%);
+  box-shadow:0 1px 2px rgba(0,0,0,0.65);
+}
+.payment-bolt.tl{top:12px; left:12px;}
+.payment-bolt.tr{top:12px; right:44px;}
+
+/* ---------- Head ---------- */
+.payment-head{
+  position:relative;
+  padding:26px 26px 20px;
+  display:flex; justify-content:space-between; align-items:flex-start; gap:16px;
+  border-bottom:1px solid rgba(255,255,255,0.08);
+}
+.payment-head .tag{font-family:'Space Mono'; font-size:11px; letter-spacing:1.5px; text-transform:uppercase; color:var(--sky); display:block; margin-bottom:6px;}
+.payment-head h3{font-family:'Oswald'; color:#fff; font-size:20px; letter-spacing:.3px; margin-bottom:6px;}
+.payment-head-price{font-family:'Space Mono'; font-size:17px; font-weight:700; color:var(--amber);}
+
+/* Radial completion gauge — same dial vocabulary as Home's speedometers
+   and Listing's sort dial, sized down for the header. */
+.readiness-gauge{position:relative; width:54px; height:54px; flex:none;}
+.readiness-gauge svg{overflow:visible;}
+.readiness-track{stroke:rgba(255,255,255,0.12);}
+.readiness-fill{
+  stroke:var(--amber); stroke-linecap:round;
+  filter:drop-shadow(0 0 4px rgba(242,169,59,.6));
+  transition:stroke-dashoffset .3s ease, stroke .3s ease, filter .3s ease;
+}
+.readiness-fill.complete{stroke:var(--sky); filter:drop-shadow(0 0 4px rgba(92,201,224,.7));}
+.readiness-num{position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-size:11px; color:#fff;}
+
+.payment-body{padding:22px 26px 26px;}
+
+/* ---------- Gear-gate method toggle (same device as Listing's type select) ---------- */
+.payment-method-row{
+  display:grid; grid-auto-flow:column; grid-auto-columns:1fr; position:relative;
+  height:46px; border-radius:6px; overflow:hidden;
+  background:rgba(0,0,0,0.35); border:1px solid rgba(255,255,255,0.08);
+  margin-bottom:18px;
+}
+.payment-method-slider{
+  position:absolute; top:0; bottom:0; left:0; width:50%; z-index:1;
+  background:linear-gradient(180deg, var(--amber), var(--amber-deep));
+  box-shadow:0 0 16px rgba(242,169,59,0.5), inset 0 1px 0 rgba(255,255,255,.35);
+  transition:transform .32s cubic-bezier(.2,.8,.2,1);
+}
+.payment-method-row.finance .payment-method-slider{transform:translateX(100%);}
+.payment-method-btn{
+  position:relative; z-index:2; height:100%; background:none; border:none;
+  font-family:'Space Mono'; font-size:11.5px; letter-spacing:1px; text-transform:uppercase;
+  color:#aab2bc; display:flex; align-items:center; justify-content:center; gap:6px;
+  transition:color .25s ease;
+}
+.payment-method-btn.active{color:var(--ink); font-weight:700;}
+.payment-method-btn:hover:not(.active){color:#fff;}
+
+/* ---------- Finance / due-today readout ---------- */
+.finance-breakdown{
+  background:rgba(0,0,0,0.35); border:1px solid rgba(255,255,255,0.08);
+  border-left:3px solid var(--sky); border-radius:4px;
+  padding:14px 16px; margin-bottom:20px; display:flex; flex-direction:column; gap:8px;
+}
+.finance-breakdown div{display:flex; justify-content:space-between; align-items:baseline; gap:10px;}
+.finance-breakdown span{font-family:'Space Mono'; color:#8a94a0; text-transform:uppercase; letter-spacing:.5px; font-size:10.5px;}
+.finance-breakdown b{font-family:'Space Mono'; color:#fff; font-size:12.5px; text-align:right;}
+
+/* ---------- Form ---------- */
+.payment-form{display:flex; flex-direction:column; gap:5px;}
+.payment-form label{font-family:'Space Mono'; font-size:10.5px; letter-spacing:1.5px; text-transform:uppercase; color:#6b7580; margin-top:12px;}
+.payment-form input{
+  border:1px solid rgba(255,255,255,0.1); background:rgba(0,0,0,0.3);
+  padding:12px 13px; font-family:inherit; font-size:13.5px; color:#fff; border-radius:3px;
+  transition:border-color .15s ease, background .15s ease;
+}
+.payment-form input::placeholder{color:#5b6672;}
+.payment-form input:focus{outline:none; border-color:var(--sky); background:rgba(0,0,0,0.45);}
+
+.payment-submit{margin-top:20px; width:100%; display:flex; align-items:center; justify-content:center; gap:10px;}
+.payment-submit:disabled{opacity:.4; cursor:not-allowed;}
+
+.ignition-spinner{
+  width:13px; height:13px; border-radius:50%;
+  border:2px solid rgba(16,21,28,.25); border-top-color:var(--ink);
+  animation:ignitionSpin .7s linear infinite;
+}
+@keyframes ignitionSpin{to{transform:rotate(360deg);}}
+
+.payment-fine-print{font-size:11px; color:#6b7580; text-transform:none; margin-top:10px; line-height:1.5; text-align:center;}
+
+@media (max-width:520px){
+  .payment-head{padding:22px 20px 18px;}
+  .payment-body{padding:18px 20px 22px;}
+  .readiness-gauge{width:44px; height:44px;}
+  .payment-head h3{font-size:18px;}
+}

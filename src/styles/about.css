@@ -1,0 +1,112 @@
+/* ============================================================
+   ABOUT PAGE (supplemental)
+   Owned by: Person A
+   Imported in: views/About.jsx, layered on top of info-pages.css
+   Signature: "Window Sticker" — the company story laid out like a
+   Monroney label: grid-ruled paper, labelled statement fields, boxed
+   spec fields for contact info, and a barcode footer. Kept in its own
+   file rather than editing info-pages.css, since that file is shared
+   with Gallery / Contact / Queries / Sitemap.
+   ============================================================ */
+
+.window-sticker{
+  position:relative;
+  background:
+    repeating-linear-gradient(180deg, rgba(16,21,28,0.028) 0 1px, transparent 1px 34px),
+    repeating-linear-gradient(90deg, rgba(16,21,28,0.028) 0 1px, transparent 1px 34px),
+    #fff;
+  border:2px solid var(--ink);
+  box-shadow:0 0 0 1px #fff, 0 0 0 3px var(--ink), 0 24px 48px rgba(16,21,28,0.14);
+  padding:28px 30px 22px;
+}
+
+/* ---------- Header ---------- */
+.sticker-head{
+  display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:12px;
+  padding-bottom:16px;
+  margin-bottom:20px;
+  border-bottom:2px solid var(--ink);
+}
+.sticker-brand{ display:flex; flex-direction:column; }
+.sticker-brand-name{ font-size:26px; letter-spacing:.5px; color:var(--ink); }
+.sticker-brand-sub{ font-size:10.5px; letter-spacing:2px; color:var(--steel); margin-top:4px; }
+.sticker-issue{
+  display:flex; flex-direction:column; align-items:flex-end; gap:3px;
+  font-size:10px; letter-spacing:1px; color:var(--steel); text-align:right;
+}
+.sticker-issue span:first-child{ color:var(--amber-deep); font-weight:700; }
+
+/* ---------- Body ---------- */
+.sticker-body{
+  display:grid;
+  grid-template-columns:1fr 280px;
+  gap:36px;
+  align-items:start;
+}
+
+.sticker-main{ display:flex; flex-direction:column; gap:20px; }
+.sticker-field{
+  padding-top:14px;
+  border-top:1px dashed var(--paper-dim);
+}
+.sticker-field:first-child{ border-top:none; padding-top:0; }
+.sticker-field-label{
+  display:block; font-size:10px; letter-spacing:2.5px; text-transform:uppercase;
+  color:var(--amber-deep); margin-bottom:8px;
+}
+.sticker-field p{
+  color:var(--ink-soft); text-transform:none; font-size:14.5px; line-height:1.7;
+}
+
+.sticker-side{
+  display:flex; flex-direction:column; gap:10px;
+  padding:16px;
+  background:var(--paper);
+  border:1px solid var(--paper-dim);
+}
+.sticker-side-label{
+  font-size:9.5px; letter-spacing:2px; text-transform:uppercase; color:var(--steel);
+  margin-bottom:2px;
+}
+
+.spec-box{
+  display:flex; flex-direction:column; gap:3px;
+  padding:11px 12px;
+  background:#fff;
+  border:1px solid var(--paper-dim);
+}
+.spec-box-label{
+  font-size:9px; letter-spacing:1.5px; text-transform:uppercase; color:var(--steel);
+}
+.spec-box-value{
+  font-family:'Oswald'; font-size:14.5px; letter-spacing:.2px; color:var(--ink);
+}
+
+/* ---------- Footer: barcode + fine print ---------- */
+.sticker-foot{
+  display:flex; align-items:center; gap:16px; flex-wrap:wrap;
+  margin-top:24px; padding-top:16px;
+  border-top:2px solid var(--ink);
+}
+.barcode{
+  width:120px; height:32px; flex:none;
+  background:repeating-linear-gradient(90deg,
+    var(--ink) 0 2px, transparent 2px 4px,
+    var(--ink) 4px 5px, transparent 5px 9px,
+    var(--ink) 9px 12px, transparent 12px 14px,
+    var(--ink) 14px 15px, transparent 15px 20px
+  );
+}
+.fineprint{
+  font-size:8.5px; letter-spacing:1px; color:var(--steel); flex:1; min-width:200px;
+}
+
+@media (max-width:780px){
+  .sticker-body{ grid-template-columns:1fr; }
+  .sticker-side{ order:-1; }
+}
+
+@media (max-width:520px){
+  .window-sticker{ padding:22px 18px 18px; }
+  .sticker-issue{ align-items:flex-start; text-align:left; }
+}

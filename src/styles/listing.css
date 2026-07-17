@@ -1,36 +1,752 @@
 /* ============================================================
-   LISTING — car grid, car card, filters, sort (New/Used pages)
+   LISTING (New / Used inventory)
    Owned by: Person B
-   Imported in: components/CarCard.jsx and views/Listing.jsx
+   Imported in: views/Listing.jsx
+   Signature: "Ignition Panel" — a gear-gate type selector, a rev-dial
+   sort gauge and a trip-odometer result count, styled as one instrument
+   cluster. Reuses the site's existing dial / viewfinder / mono-readout
+   language (Home, Modal) rather than inventing a new visual system.
    ============================================================ */
 
-.car-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:24px;}
-.car-card{background:#fff; border:1px solid var(--paper-dim); overflow:hidden; transition:transform .18s ease, box-shadow .18s ease; cursor:pointer;}
-.car-card:hover{transform:translateY(-4px); box-shadow:0 18px 30px -18px rgba(16,21,28,0.25);}
-.car-photo{height:180px; position:relative; background-size:cover; background-position:center;}
-.car-photo::after{content:''; position:absolute; inset:0; background:linear-gradient(180deg, rgba(16,21,28,0) 55%, rgba(16,21,28,0.35) 100%);}
-.condition-badge{position:absolute; top:12px; left:12px; z-index:2; font-family:'Space Mono'; font-size:10px; letter-spacing:1px; text-transform:uppercase; padding:5px 9px; border-radius:2px; background:var(--amber); color:var(--ink); font-weight:700;}
-.condition-badge.used{background:var(--sky);}
-.car-body{padding:16px 16px 18px;}
-.car-name{font-family:'Oswald'; font-size:16px; letter-spacing:.3px; margin-bottom:5px;}
-.car-meta{font-size:12px; color:var(--steel); text-transform:none; margin-bottom:12px;}
-.car-foot{display:flex; align-items:center; justify-content:space-between;}
-.car-price{font-family:'Space Mono'; font-weight:700; font-size:15px; color:var(--ink);}
-.car-cta{font-size:11px; letter-spacing:1px; text-transform:uppercase; color:var(--amber-deep); font-weight:600;}
-.empty-state{grid-column:1/-1; text-align:center; padding:60px 20px; color:var(--steel); font-size:14px; border:1px dashed var(--paper-dim);}
-.empty-state .display{font-size:18px; color:var(--ink); margin-bottom:8px;}
-
-.filter-bar{display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px; margin-bottom:28px; padding-bottom:22px; border-bottom:1px solid var(--paper-dim);}
-.chip-row{display:flex; gap:8px; flex-wrap:wrap;}
-.chip{background:#fff; border:1px solid var(--paper-dim); color:var(--steel); font-size:12px; letter-spacing:.5px; text-transform:uppercase; padding:9px 16px; border-radius:20px; transition:all .15s ease;}
-.chip:hover{border-color:var(--ink);}
-.chip.active{background:var(--ink); color:#fff; border-color:var(--ink);}
-.sort-select{border:1px solid var(--paper-dim); background:#fff; padding:9px 14px; font-size:12.5px; color:var(--ink); font-family:inherit;}
-.result-count{font-family:'Space Mono'; font-size:11.5px; color:var(--steel); margin-bottom:20px;}
-
-@media (max-width:860px){
-  .car-grid{grid-template-columns:1fr 1fr;}
+/* ---------- Hero deco (scoped additions on top of base .page-hero) ---------- */
+.page-hero.listing-hero {
+  overflow: hidden;
 }
-@media (max-width:520px){
-  .car-grid{grid-template-columns:1fr;}
+
+.listing-hero .rivet {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  z-index: 2;
+  background: radial-gradient(circle at 35% 35%, #fff, #7c8792 55%, #10151c 100%);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+}
+
+.listing-hero .rivet.tl {
+  top: 22px;
+  left: 22px;
+}
+
+.listing-hero .rivet.tr {
+  top: 22px;
+  right: 22px;
+}
+
+.listing-hero .tach-deco {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  width: 220px;
+  height: 220px;
+  z-index: 1;
+  opacity: .6;
+  pointer-events: none;
+}
+
+@media (max-width:640px) {
+  .listing-hero .rivet {
+    display: none;
+  }
+
+  .listing-hero .tach-deco {
+    width: 140px;
+    height: 140px;
+    opacity: .4;
+  }
+}
+
+/* ---------- Rotating car-photo backdrop ---------- */
+.listing-hero-slides {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.listing-hero-slide {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center 38%;
+  opacity: 0;
+  transform: scale(1.02);
+  transition: opacity 1.1s ease, transform 6.5s ease;
+}
+
+.listing-hero-slide.active {
+  opacity: 1;
+  z-index: 1;
+  transform: scale(1.08);
+}
+
+.listing-hero.page-hero::before {
+  z-index: 1;
+}
+
+/* Horizontal scan line — a targeting/inspection sweep rather than the
+   home hero's crossfade, so the two heroes read as different instruments. */
+.listing-scan {
+  position: absolute;
+  left: 4%;
+  right: 4%;
+  height: 1.5px;
+  z-index: 2;
+  background: linear-gradient(90deg, transparent, var(--sky), transparent);
+  opacity: .65;
+  box-shadow: 0 0 12px var(--sky);
+  animation: scanSweep 4.4s ease-in-out infinite;
+}
+
+@keyframes scanSweep {
+
+  0%,
+  100% {
+    top: 14%;
+  }
+
+  50% {
+    top: 82%;
+  }
+}
+
+.listing-hero .rivet {
+  z-index: 3;
+}
+
+.listing-hero .tach-deco {
+  z-index: 2;
+}
+
+.listing-hero-inner {
+  position: relative;
+  z-index: 3;
+}
+
+/* ---------- Spec ticket — swaps per car, like a windshield ID card ---------- */
+.listing-spec-ticket {
+  margin-top: 24px;
+  max-width: 420px;
+  width: fit-content;
+  background: rgba(11, 14, 18, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-left: 3px solid var(--amber);
+  border-radius: 3px;
+  padding: 15px 18px;
+  backdrop-filter: blur(4px);
+  animation: ticketIn .5s cubic-bezier(.2, .8, .2, 1) both;
+}
+
+@keyframes ticketIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.ticket-row.top {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 16px;
+  margin-bottom: 10px;
+}
+
+.ticket-name {
+  font-size: 15.5px;
+  color: #fff;
+  letter-spacing: .3px;
+}
+
+.ticket-idx {
+  font-size: 10.5px;
+  color: var(--amber);
+  letter-spacing: 1.5px;
+  white-space: nowrap;
+}
+
+.ticket-specs {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  font-size: 11.5px;
+  color: #c7ced6;
+  margin-bottom: 13px;
+}
+
+.ticket-specs b {
+  color: var(--sky);
+  font-size: 12.5px;
+}
+
+.ticket-btn {
+  background: none;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  color: #fff;
+  font-size: 10.5px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 9px 16px;
+  border-radius: 2px;
+  transition: border-color .15s ease, background .15s ease;
+}
+
+.ticket-btn:hover {
+  border-color: var(--amber);
+  background: rgba(242, 169, 59, 0.12);
+}
+
+.listing-hero-dots {
+  position: absolute;
+  bottom: 20px;
+  right: 56px;
+  z-index: 4;
+  display: flex;
+  gap: 7px;
+}
+
+.listing-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  padding: 0;
+  transition: all .25s ease;
+}
+
+.listing-dot.active {
+  background: var(--amber);
+  border-color: var(--amber);
+  box-shadow: 0 0 8px rgba(242, 169, 59, 0.6);
+  transform: scale(1.2);
+}
+
+@media (max-width:640px) {
+  .listing-scan {
+    display: none;
+  }
+
+  .listing-spec-ticket {
+    max-width: none;
+    width: auto;
+  }
+
+  .listing-hero-dots {
+    right: 20px;
+    bottom: 14px;
+  }
+}
+
+/* ---------- Ignition panel ---------- */
+.ignition-panel {
+  position: relative;
+  margin-top: -46px;
+  z-index: 6;
+  display: flex;
+  align-items: center;
+  gap: 26px;
+  flex-wrap: wrap;
+  padding: 24px 30px;
+  background:
+    repeating-linear-gradient(115deg, rgba(255, 255, 255, 0.028) 0 2px, transparent 2px 7px),
+    linear-gradient(160deg, var(--ink-soft) 0%, var(--ink) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
+  box-shadow: 0 24px 48px rgba(11, 14, 18, 0.35);
+}
+
+.bolt {
+  position: absolute;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  z-index: 2;
+  background: radial-gradient(circle at 35% 35%, #fff, #7c8792 55%, #10151c 100%);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.65);
+}
+
+.bolt.tl {
+  top: 11px;
+  left: 11px;
+}
+
+.bolt.tr {
+  top: 11px;
+  right: 11px;
+}
+
+.bolt.bl {
+  bottom: 11px;
+  left: 11px;
+}
+
+.bolt.br {
+  bottom: 11px;
+  right: 11px;
+}
+
+.panel-label {
+  display: block;
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #6b7580;
+  margin-bottom: 9px;
+}
+
+.panel-divider {
+  width: 1px;
+  align-self: stretch;
+  background: rgba(255, 255, 255, 0.1);
+  flex: none;
+}
+
+/* ---------- Gear-gate type selector ---------- */
+.gear-block {
+  flex: 1 1 320px;
+  min-width: 260px;
+}
+
+.gear-gate {
+  position: relative;
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  height: 46px;
+  border-radius: 6px;
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.gear-slider {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1;
+  background: linear-gradient(180deg, var(--amber), var(--amber-deep));
+  box-shadow: 0 0 16px rgba(242, 169, 59, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+  transition: transform .32s cubic-bezier(.2, .8, .2, 1);
+}
+
+.gear-btn {
+  position: relative;
+  z-index: 2;
+  height: 100%;
+  background: none;
+  border: none;
+  border-right: 1px solid rgba(255, 255, 255, 0.07);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  font-family: 'Space Mono';
+  font-size: 10.5px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #aab2bc;
+  transition: color .25s ease;
+}
+
+.gear-gate .gear-btn:last-child {
+  border-right: none;
+}
+
+.gear-btn:hover {
+  color: #fff;
+}
+
+.gear-btn.active {
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.gear-led {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.25);
+  transition: background .25s ease, box-shadow .25s ease;
+}
+
+.gear-btn.active .gear-led {
+  background: var(--ink);
+  box-shadow: 0 0 4px rgba(16, 21, 28, 0.45);
+}
+
+/* ---------- Sort dial + LCD select ---------- */
+.sort-block {
+  flex: 0 0 auto;
+}
+
+.sort-control {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.sort-dial {
+  position: relative;
+  width: 56px;
+  height: 56px;
+  flex: none;
+}
+
+.sort-dial svg {
+  overflow: visible;
+}
+
+.dial-track {
+  stroke: rgba(255, 255, 255, 0.14);
+}
+
+.dial-redline {
+  stroke: rgba(216, 143, 31, 0.6);
+}
+
+.dial-tick {
+  stroke: rgba(255, 255, 255, 0.22);
+  stroke-linecap: round;
+  transition: stroke .35s ease, filter .35s ease;
+}
+
+.dial-tick.minor {
+  stroke-width: 1;
+}
+
+.dial-tick.major {
+  stroke-width: 2;
+  stroke: rgba(255, 255, 255, 0.32);
+}
+
+.dial-tick.major.lit {
+  stroke: var(--amber);
+  filter: drop-shadow(0 0 3px rgba(242, 169, 59, 0.85));
+}
+
+.dial-hub {
+  fill: #0b0f14;
+  stroke: var(--amber);
+  stroke-width: 1.5;
+}
+
+.dial-needle {
+  stroke: var(--amber);
+  stroke-width: 2;
+  stroke-linecap: round;
+  transition: transform .55s cubic-bezier(.34, 1.56, .64, 1);
+  filter: drop-shadow(0 0 4px rgba(242, 169, 59, 0.7));
+}
+
+.sort-popover {
+  position: relative;
+}
+
+.sort-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  background: #0b0f14;
+  color: var(--sky);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 4px;
+  padding: 11px 14px;
+  min-width: 172px;
+  font-family: 'Space Mono';
+  font-size: 11.5px;
+  letter-spacing: .5px;
+  text-transform: uppercase;
+  text-shadow: 0 0 8px rgba(92, 201, 224, 0.45);
+  transition: border-color .15s ease;
+}
+
+.sort-trigger:hover,
+.sort-trigger.open {
+  border-color: var(--sky);
+}
+
+.sort-trigger:focus-visible {
+  outline: 2px solid var(--amber);
+  outline-offset: 2px;
+}
+
+.sort-chevron {
+  width: 12px;
+  height: 8px;
+  flex: none;
+  color: var(--sky);
+  transition: transform .2s ease;
+}
+
+.sort-trigger.open .sort-chevron {
+  transform: rotate(180deg);
+}
+
+.sort-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  right: 0;
+  z-index: 20;
+  list-style: none;
+  margin: 0;
+  padding: 6px;
+  background: linear-gradient(160deg, var(--ink-soft) 0%, var(--ink) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.45);
+  animation: ticketIn .18s cubic-bezier(.2, .8, .2, 1) both;
+}
+
+.sort-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 4px;
+  background: none;
+  border: none;
+  font-family: 'Space Mono';
+  font-size: 11px;
+  letter-spacing: .4px;
+  text-transform: uppercase;
+  color: #c7ced6;
+  transition: background .15s ease, color .15s ease;
+}
+
+.sort-option:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: #fff;
+}
+
+.sort-option.active {
+  color: var(--amber);
+}
+
+.sort-option-led {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  flex: none;
+  transition: background .15s ease, box-shadow .15s ease;
+}
+
+.sort-option.active .sort-option-led {
+  background: var(--amber);
+  box-shadow: 0 0 6px var(--amber);
+}
+
+.sort-check {
+  width: 13px;
+  height: 10px;
+  margin-left: auto;
+  color: var(--amber);
+  flex: none;
+}
+
+/* ---------- Odometer result readout ---------- */
+.odo-readout {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin: 24px 0 30px;
+  padding: 12px 18px;
+  background: #0b0f14;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
+}
+
+.odo-label {
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: #6b7580;
+  text-transform: uppercase;
+}
+
+.odo-digits {
+  display: flex;
+  gap: 4px;
+}
+
+.odo-cell {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 32px;
+  background: #000;
+  border-radius: 3px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+}
+
+.odo-digit {
+  display: block;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--amber);
+  text-shadow: 0 0 8px rgba(242, 169, 59, 0.65);
+  animation: odoRoll .32s ease;
+}
+
+@keyframes odoRoll {
+  from {
+    transform: translateY(-110%);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.odo-suffix {
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  color: #5b6672;
+  text-transform: uppercase;
+}
+
+/* ---------- Empty state / warning cluster ---------- */
+.empty-state {
+  grid-column: 1/-1;
+  text-align: center;
+  padding: 64px 24px;
+}
+
+.warning-cluster {
+  background: var(--ink);
+  border-radius: 8px;
+  border: 1px dashed rgba(242, 169, 59, 0.4);
+}
+
+.warning-icon {
+  display: inline-flex;
+  margin-bottom: 14px;
+  animation: warnPulse 1.7s ease-in-out infinite;
+}
+
+.warning-icon svg {
+  width: 38px;
+  height: 38px;
+}
+
+@keyframes warnPulse {
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: .45;
+  }
+}
+
+.warning-cluster .display {
+  color: #fff;
+  font-size: 18.5px;
+  letter-spacing: .4px;
+  margin-bottom: 8px;
+}
+
+.warning-cluster p {
+  color: #9aa3ad;
+  font-size: 13.5px;
+  max-width: 360px;
+  margin: 0 auto;
+  text-transform: none;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width:860px) {
+  .ignition-panel {
+    margin-top: -30px;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .panel-divider {
+    display: none;
+  }
+
+  .gear-block {
+    min-width: 0;
+  }
+
+  .sort-block {
+    width: 100%;
+  }
+
+  .sort-block .panel-label {
+    margin-bottom: 6px;
+  }
+
+  .sort-control {
+    width: 100%;
+  }
+
+  .sort-popover {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .sort-trigger {
+    width: 100%;
+    min-width: 0;
+  }
+}
+
+@media (max-width:520px) {
+  .ignition-panel {
+    padding: 20px 18px;
+  }
+
+  .gear-gate {
+    grid-auto-flow: row;
+    grid-template-columns: 1fr 1fr;
+    height: auto;
+  }
+
+  .gear-slider {
+    display: none;
+  }
+  .gear-block {
+    flex: 1;
+  
+  }
+
+  .gear-btn {
+    height: 44px;
+    border-right: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+    flex-direction: row;
+    gap: 7px;
+  }
+
+  .gear-btn:nth-child(odd) {
+    border-right: 1px solid rgba(255, 255, 255, 0.07);
+  }
+
+  .gear-btn.active {
+    background: linear-gradient(180deg, var(--amber), var(--amber-deep));
+    color: var(--ink);
+  }
+
+  .odo-readout {
+    justify-content: space-between;
+  }
 }

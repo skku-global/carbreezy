@@ -1,22 +1,162 @@
 /* ============================================================
-   GALLERY TAB + LIGHTBOX
+   GALLERY TAB — "CONTACT SHEET"
    Owned by: Person C
    Imported in: views/Gallery.jsx
+   Signature: showroom photos as a strip of exposed film — sprocket-
+   perforated hero, frame codes that encode roll position + angle
+   (e.g. 004A / 004B), and a light-table loupe in place of a plain
+   lightbox. Deliberately paper-and-emulsion rather than the metal/
+   instrument vocabulary used on Home, Listing and Contact.
    ============================================================ */
 
-.gallery-filter{display:flex; gap:8px; margin-bottom:26px; flex-wrap:wrap;}
-.gallery-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:12px;}
-.gallery-item{aspect-ratio:4/3; background-size:cover; background-position:center; cursor:pointer; position:relative; overflow:hidden;}
-.gallery-item::after{content:''; position:absolute; inset:0; background:rgba(16,21,28,0); transition:background .15s ease;}
-.gallery-item:hover::after{background:rgba(16,21,28,0.25);}
-.gallery-item .label{position:absolute; bottom:8px; left:10px; color:#fff; font-family:'Space Mono'; font-size:10.5px; z-index:1; opacity:0; transition:opacity .15s ease;}
-.gallery-item:hover .label{opacity:1;}
+/* ---------- Hero: sprocketed film leader ---------- */
+.gallery-hero{
+  position:relative;
+  padding-top:34px;
+  padding-bottom:34px;
+}
+.sprocket-row{
+  position:relative;
+  z-index:1;
+  display:flex;
+  justify-content:space-between;
+  padding:0 26px;
+  margin-bottom:22px;
+}
+.sprocket-row.bottom{margin-bottom:0; margin-top:22px;}
+.sprocket{
+  width:9px; height:9px; border-radius:2px;
+  background:rgba(255,255,255,0.14);
+  border:1px solid rgba(255,255,255,0.22);
+}
 
-.lightbox{position:fixed; inset:0; background:rgba(10,13,17,0.92); z-index:100; display:none; align-items:center; justify-content:center; padding:30px;}
-.lightbox.open{display:flex;}
-.lightbox img{max-height:82vh; max-width:100%;}
-.lightbox-close{position:absolute; top:22px; right:26px; background:none; border:none; color:#fff; font-size:24px;}
+/* ---------- Filter: film-canister tabs ---------- */
+.reel-tabs{
+  display:flex; gap:10px; flex-wrap:wrap; margin-bottom:30px;
+}
+.reel-tab{
+  display:inline-flex; align-items:center; gap:8px;
+  background:var(--ink); color:#c7ced6;
+  border:1px solid rgba(255,255,255,0.1);
+  border-radius:3px 3px 8px 8px;
+  padding:9px 16px 9px 12px;
+  font-family:'Space Mono'; font-size:11px; letter-spacing:1px; text-transform:uppercase;
+  transition:color .18s ease, border-color .18s ease, background .18s ease;
+}
+.reel-tab-hole{
+  width:8px; height:8px; border-radius:50%;
+  background:#0b0f14; border:1px solid rgba(255,255,255,0.25);
+  flex:none;
+}
+.reel-tab:hover{border-color:rgba(255,255,255,0.28); color:#fff;}
+.reel-tab.active{
+  background:var(--amber); color:var(--ink); border-color:var(--amber);
+  box-shadow:0 0 14px rgba(242,169,59,0.4);
+}
+.reel-tab.active .reel-tab-hole{background:var(--ink); border-color:var(--ink);}
+
+/* ---------- Contact sheet grid ---------- */
+.contact-sheet{
+  display:grid; grid-template-columns:repeat(4,1fr); gap:3px;
+  background:var(--ink); padding:14px; border-radius:4px;
+}
+
+.frame{cursor:pointer;}
+.frame-photo{
+  position:relative; aspect-ratio:4/3;
+  background-size:cover; background-position:center;
+  background-color:var(--ink-soft2);
+  overflow:hidden;
+  filter:saturate(.9) contrast(1.02);
+  transition:filter .2s ease, transform .2s ease;
+}
+.frame:hover .frame-photo{filter:saturate(1.05) contrast(1.05); transform:scale(1.015);}
+
+.frame-corner{
+  position:absolute; width:11px; height:11px; z-index:2;
+  border-color:rgba(255,255,255,0); transition:border-color .2s ease;
+}
+.frame:hover .frame-corner{border-color:rgba(255,255,255,0.8);}
+.frame-corner.tl{top:6px; left:6px; border-top:1px solid; border-left:1px solid;}
+.frame-corner.tr{top:6px; right:6px; border-top:1px solid; border-right:1px solid;}
+.frame-corner.bl{bottom:6px; left:6px; border-bottom:1px solid; border-left:1px solid;}
+.frame-corner.br{bottom:6px; right:6px; border-bottom:1px solid; border-right:1px solid;}
+
+.frame-code{
+  position:absolute; left:7px; bottom:7px; z-index:2;
+  font-size:10px; letter-spacing:.5px; color:var(--amber);
+  background:rgba(11,14,18,0.72); padding:3px 6px; border-radius:2px;
+  opacity:0; transform:translateY(4px);
+  transition:opacity .2s ease, transform .2s ease;
+}
+.frame:hover .frame-code{opacity:1; transform:translateY(0);}
+
+.frame-label{
+  display:block; background:var(--ink); color:#8a94a0;
+  font-family:'Space Mono'; font-size:9.5px; letter-spacing:.6px;
+  text-transform:uppercase; padding:6px 2px 2px;
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+}
+
+@media (hover:none) and (pointer:coarse){
+  .frame-code{opacity:1; transform:none;}
+}
 
 @media (max-width:860px){
-  .gallery-grid{grid-template-columns:repeat(2,1fr);}
+  .contact-sheet{grid-template-columns:repeat(3,1fr);}
+}
+@media (max-width:640px){
+  .contact-sheet{grid-template-columns:repeat(2,1fr); gap:2px; padding:8px;}
+  .sprocket-row{padding:0 14px;}
+  .sprocket{width:7px; height:7px;}
+}
+
+/* ---------- Loupe (light-table viewer) ---------- */
+.loupe{
+  position:fixed; inset:0; z-index:100;
+  background:radial-gradient(ellipse at center, rgba(30,36,44,0.97) 0%, rgba(6,8,10,0.98) 75%);
+  display:none; align-items:center; justify-content:center; padding:40px;
+}
+.loupe.open{display:flex;}
+
+.loupe-frame{
+  position:relative; max-width:min(88vw, 900px);
+  background:#0b0f14;
+  border:10px solid #14191f;
+  border-radius:4px;
+  box-shadow:0 30px 70px rgba(0,0,0,0.6), inset 0 0 0 1px rgba(255,255,255,0.05);
+}
+.loupe-frame img{max-height:70vh; width:100%; object-fit:contain; display:block;}
+
+.loupe-caption{
+  display:flex; align-items:center; justify-content:space-between; gap:14px;
+  padding:12px 6px 4px; flex-wrap:wrap;
+}
+.loupe-code{color:var(--amber); font-size:11.5px; letter-spacing:1px;}
+.loupe-name{color:#e4e8ec; font-size:11.5px; letter-spacing:.5px; text-transform:uppercase; flex:1;}
+.loupe-counter{color:#6b7580; font-size:10.5px; letter-spacing:1px;}
+
+.loupe-close{
+  position:absolute; top:22px; right:26px; z-index:2;
+  background:none; border:none; color:#fff; font-size:22px;
+}
+
+.loupe-arrow{
+  position:absolute; top:50%; transform:translateY(-50%); z-index:2;
+  width:44px; height:44px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.18);
+  color:#fff; font-size:22px; line-height:1;
+  transition:background .18s ease, border-color .18s ease;
+}
+.loupe-arrow:hover{background:var(--amber); border-color:var(--amber); color:var(--ink);}
+.loupe-arrow.prev{left:24px;}
+.loupe-arrow.next{right:24px;}
+
+@media (max-width:640px){
+  .loupe{padding:18px;}
+  .loupe-frame{border-width:6px;}
+  .loupe-arrow{width:38px; height:38px; font-size:18px;}
+  .loupe-arrow.prev{left:8px;}
+  .loupe-arrow.next{right:8px;}
 }

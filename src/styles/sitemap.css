@@ -1,0 +1,190 @@
+/* ============================================================
+   SITE MAP (supplemental)
+   Owned by: Person A
+   Imported in: views/Sitemap.jsx, layered on top of info-pages.css
+   Signature: "Fuse Box Map" — a lid-off underhood fuse panel where each
+   page is a numbered, color-coded fuse. Kept in its own file rather than
+   editing info-pages.css, since that file is shared with About / Queries
+   / Contact.
+   ============================================================ */
+
+.fusebox {
+  position: relative;
+  max-width: 900px;
+  margin: 0 auto;
+  background:
+    repeating-linear-gradient(100deg, rgba(255, 255, 255, 0.015) 0 3px, transparent 3px 10px),
+    linear-gradient(165deg, var(--ink-soft) 0%, var(--ink) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  padding: 28px 30px 22px;
+  box-shadow: 0 24px 48px rgba(11, 14, 18, 0.32), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.fusebox-screw {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #fff, #7c8792 55%, #10151c 100%);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.65);
+}
+
+.fusebox-screw::before {
+  /* cross-head slot */
+  content: '';
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 8px;
+  height: 1.4px;
+  background: rgba(16, 21, 28, 0.55);
+  border-radius: 1px;
+  box-shadow: 0 0 0 0.7px rgba(16, 21, 28, 0.55);
+  transform: rotate(38deg);
+}
+
+.fusebox-screw.tl { top: 14px; left: 14px; }
+.fusebox-screw.tr { top: 14px; right: 14px; }
+.fusebox-screw.bl { bottom: 14px; left: 14px; }
+.fusebox-screw.br { bottom: 14px; right: 14px; }
+
+/* ---------- Header strip ---------- */
+.fusebox-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 16px;
+  margin-bottom: 22px;
+  border-bottom: 1px dashed rgba(255, 255, 255, 0.14);
+}
+
+.fusebox-header-label {
+  font-size: 10px;
+  letter-spacing: 2.5px;
+  color: #8a94a0;
+}
+
+.fusebox-header-code {
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  color: var(--amber);
+  text-shadow: 0 0 6px rgba(242, 169, 59, 0.5);
+}
+
+/* ---------- Fuse grid ---------- */
+.fusebox-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 14px 12px;
+}
+
+.fuse {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  background: none;
+  border: none;
+  padding: 10px 6px 12px;
+  border-radius: 8px;
+  transition: transform .15s ease, background .15s ease;
+}
+
+.fuse:hover,
+.fuse:focus-visible {
+  transform: translateY(-3px);
+  background: rgba(255, 255, 255, 0.03);
+  outline: none;
+}
+
+/* the fuse body itself — a small translucent plastic cartridge with a
+   colored tint, like real color-coded automotive fuses */
+.fuse-cap {
+  position: relative;
+  width: 34px;
+  height: 46px;
+  border-radius: 6px 6px 4px 4px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.14) 0%, transparent 40%);
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.25), 0 3px 6px rgba(0, 0, 0, 0.35);
+  overflow: hidden;
+}
+
+.fuse-t1 .fuse-cap { background-color: rgba(242, 169, 59, 0.28); }
+.fuse-t2 .fuse-cap { background-color: rgba(92, 201, 224, 0.24); }
+.fuse-t3 .fuse-cap { background-color: rgba(91, 102, 114, 0.34); }
+.fuse-t4 .fuse-cap { background-color: rgba(216, 143, 31, 0.22); }
+
+.fuse-filament {
+  position: absolute;
+  left: 50%;
+  top: 6px;
+  bottom: 6px;
+  width: 2px;
+  transform: translateX(-50%);
+  background: rgba(255, 255, 255, 0.35);
+  border-radius: 2px;
+  transition: background .15s ease, box-shadow .15s ease;
+}
+
+.fuse:hover .fuse-filament,
+.fuse:focus-visible .fuse-filament {
+  background: var(--amber);
+  box-shadow: 0 0 8px 1px rgba(242, 169, 59, 0.85);
+}
+
+.fuse-id {
+  font-size: 9px;
+  letter-spacing: 1px;
+  color: #6b7580;
+}
+
+.fuse-label {
+  font-size: 10.5px;
+  letter-spacing: .5px;
+  text-transform: uppercase;
+  color: #c7ced6;
+  text-align: center;
+  line-height: 1.3;
+}
+
+.fuse:hover .fuse-label,
+.fuse:focus-visible .fuse-label {
+  color: #fff;
+}
+
+/* ---------- Footer strip: reflective safety-strip motif, matching the
+   hardware language used on Contact's plate footer ---------- */
+.fusebox-footer {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 22px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  font-size: 9.5px;
+  letter-spacing: 2px;
+  color: #5b6672;
+}
+
+.fusebox-strip {
+  width: 34px;
+  height: 6px;
+  border-radius: 2px;
+  background: repeating-linear-gradient(45deg, var(--sky) 0 5px, var(--ink-soft2) 5px 10px);
+  flex: none;
+}
+
+@media (max-width:700px) {
+  .fusebox-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width:420px) {
+  .fusebox-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

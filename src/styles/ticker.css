@@ -2,20 +2,120 @@
    SCROLLING TICKER (date/time/location marquee)
    Owned by: Person D
    Imported in: components/Ticker.jsx
+   Signature: "Trip Computer" — a dashboard LCD strip: brushed bezel,
+   corner screws, glass glare + scanlines, green segmented digits.
+   Kept deliberately different from Home's analog chrome gauges.
    ============================================================ */
 
-.ticker{position:fixed; bottom:0; left:0; right:0; z-index:70; background:#0b0f14; border-top:1px solid rgba(255,255,255,0.08); overflow:hidden; height:34px; display:flex; align-items:center;}
-.ticker-track{display:flex; white-space:nowrap; animation:tickerScroll 26s linear infinite; will-change:transform;}
-.ticker-track:hover{animation-play-state:paused;}
-.ticker-seg{display:flex; align-items:center; gap:28px; padding-right:28px; color:#c7ced6; font-family:'Space Mono'; font-size:11px;}
-.ticker-seg b{color:var(--amber); font-weight:700;}
-.ticker-seg .sep{color:#3a4450;}
-
-@keyframes tickerScroll{
-  from{transform:translateX(0);}
-  to{transform:translateX(-50%);}
+.ticker {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 70;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.03) 0%, transparent 30%),
+    repeating-linear-gradient(100deg, rgba(255,255,255,0.015) 0 2px, transparent 2px 6px),
+    #0b0f14;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.03);
+  overflow: hidden;
 }
 
-@media (max-width:860px){
-  .ticker{font-size:9.5px; gap:14px;}
+/* glass overlay: faint horizontal scanlines + a diagonal glare sweep,
+   like an LCD screen under showroom light */
+.ticker-glass {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background:
+    linear-gradient(115deg, rgba(255,255,255,0.05) 0%, transparent 18%, transparent 82%, rgba(255,255,255,0.03) 100%),
+    repeating-linear-gradient(180deg, rgba(255,255,255,0.025) 0 1px, transparent 1px 3px);
+}
+
+/* corner mounting screws, matching the hardware vocabulary used on the
+   fuse box / ID plate elsewhere on the site */
+.ticker-screw {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  z-index: 3;
+  background: radial-gradient(circle at 35% 35%, #fff, #7c8792 55%, #10151c 100%);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.65);
+}
+.ticker-screw.l { left: 10px; }
+.ticker-screw.r { right: 10px; }
+
+.ticker-track {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  white-space: nowrap;
+  animation: tickerScroll 26s linear infinite;
+  will-change: transform;
+  padding-left: 28px;
+}
+
+.ticker-track:hover {
+  animation-play-state: paused;
+}
+
+.ticker-seg {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  padding-right: 28px;
+  color: #79e0a0;
+  font-family: 'Space Mono';
+  font-size: 11px;
+  letter-spacing: .4px;
+  text-shadow: 0 0 6px rgba(121, 224, 160, 0.45);
+}
+
+.ticker-seg b {
+  color: #a6f4c1;
+  font-weight: 700;
+  text-shadow: 0 0 7px rgba(121, 224, 160, 0.6);
+}
+
+.ticker-seg .sep {
+  color: #2e3944;
+  text-shadow: none;
+}
+
+.ticker-spotlight {
+  color: var(--amber);
+  text-shadow: 0 0 6px rgba(242, 169, 59, 0.45);
+}
+
+.ticker-spotlight b {
+  color: var(--amber);
+  text-shadow: 0 0 7px rgba(242, 169, 59, 0.6);
+}
+
+@keyframes tickerScroll {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media (max-width:860px) {
+  .ticker {
+    font-size: 9.5px;
+  }
+  .ticker-seg {
+    gap: 14px;
+    padding-right: 14px;
+  }
 }

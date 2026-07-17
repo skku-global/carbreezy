@@ -2,17 +2,199 @@
    OFFERS TAB
    Owned by: Person D
    Imported in: views/Offers.jsx
+   Signature: "Hang-Tag Board" — offers styled as physical dealership
+   price tags (pentagon silhouette, punched hole, ink-stamp discount,
+   barcode footer) instead of another instrument-cluster card. Paper-
+   white and slightly rotated, so it visually breaks from Home's dark
+   gauges, Listing's ignition panel, and Brands' tuner console.
    ============================================================ */
 
-.offer-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:24px;}
-.offer-card{background:var(--ink); color:#fff; padding:24px 22px; position:relative; overflow:hidden;}
-.offer-card::before{content:''; position:absolute; top:0; left:0; width:4px; height:100%; background:var(--amber);}
-.offer-card .pct{font-family:'Space Mono'; font-size:26px; color:var(--amber); font-weight:700; margin-bottom:10px;}
-.offer-card h3{font-family:'Oswald'; font-size:17px; margin-bottom:8px; letter-spacing:.3px;}
-.offer-card p{font-size:12.5px; color:#aab2bc; text-transform:none; margin-bottom:16px; line-height:1.5;}
-.offer-card .expiry{font-family:'Space Mono'; font-size:10.5px; color:#6b7580; margin-bottom:16px;}
-.offer-card .link-car{font-size:11.5px; letter-spacing:1px; text-transform:uppercase; color:var(--sky); border-bottom:1px solid var(--sky); padding-bottom:2px; background:none; border-top:none; border-left:none; border-right:none;}
+/* ---------- Hero deco: swinging hang-tag ---------- */
+.offers-hero {
+  overflow: hidden;
+}
 
-@media (max-width:860px){
-  .offer-grid{grid-template-columns:1fr;}
+.hangtag-deco {
+  position: absolute;
+  top: 0;
+  right: 40px;
+  width: 100px;
+  height: 130px;
+  z-index: 1;
+  transform-origin: 60px 0px;
+  animation: tagSwing 4.5s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes tagSwing {
+  0%, 100% { transform: rotate(-4deg); }
+  50% { transform: rotate(4deg); }
+}
+
+@media (max-width:640px) {
+  .hangtag-deco {
+    width: 70px;
+    height: 92px;
+    right: 18px;
+  }
+}
+
+/* ---------- Tag grid ---------- */
+.tag-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 34px 28px;
+}
+
+@media (max-width:860px) {
+  .tag-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 30px 20px;
+  }
+}
+
+@media (max-width:640px) {
+  .tag-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ---------- The tag itself ---------- */
+.tag-card {
+  position: relative;
+  background: #fff;
+  clip-path: polygon(30px 0, 100% 0, 100% 100%, 30px 100%, 0 50%);
+  padding: 26px 24px 22px 50px;
+  box-shadow: 0 14px 30px rgba(16, 21, 28, 0.1);
+  transform: rotate(var(--tag-rot, 0deg));
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+
+.tag-card:hover {
+  transform: rotate(0deg) translateY(-3px);
+  box-shadow: 0 20px 36px rgba(16, 21, 28, 0.16);
+}
+
+/* Punched hole near the tag's point */
+.tag-hole {
+  position: absolute;
+  left: 17px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: var(--paper);
+  border: 1.5px solid var(--paper-dim);
+  box-shadow: inset 0 1px 2px rgba(16, 21, 28, 0.18);
+}
+
+/* Rubber ink-stamp discount badge, overlapping the top-right corner */
+.tag-stamp {
+  position: absolute;
+  top: -12px;
+  right: 14px;
+  width: 74px;
+  height: 74px;
+  border-radius: 50%;
+  border: 2px solid var(--amber-deep);
+  box-shadow: inset 0 0 0 3px rgba(216, 143, 31, 0.15);
+  background: rgba(242, 169, 59, 0.07);
+  color: var(--amber-deep);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  transform: rotate(-13deg);
+  text-align: center;
+}
+
+.tag-stamp-pct {
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.tag-stamp-off {
+  font-size: 8.5px;
+  letter-spacing: 2px;
+  margin-top: 2px;
+}
+
+/* ---------- Body ---------- */
+.tag-body {
+  padding-right: 60px;
+  margin-bottom: 18px;
+}
+
+.tag-body h3 {
+  font-family: 'Oswald';
+  font-size: 17px;
+  letter-spacing: .3px;
+  color: var(--ink);
+  margin-bottom: 8px;
+}
+
+.tag-body p {
+  font-size: 12.5px;
+  color: var(--steel);
+  text-transform: none;
+  line-height: 1.55;
+}
+
+/* ---------- Footer: barcode, code, expiry, CTA ---------- */
+.tag-footer {
+  border-top: 1px dashed var(--paper-dim);
+  padding-top: 14px;
+}
+
+.tag-barcode {
+  width: 100%;
+  height: 22px;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.tag-footer-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+}
+
+.tag-code {
+  font-size: 10.5px;
+  letter-spacing: 1px;
+  color: var(--steel);
+}
+
+.tag-expiry {
+  font-size: 10px;
+  letter-spacing: .5px;
+  color: var(--amber-deep);
+  border: 1px dashed rgba(216, 143, 31, 0.5);
+  padding: 3px 8px;
+  border-radius: 2px;
+  transform: rotate(-2deg);
+}
+
+.tag-cta {
+  font-size: 11.5px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--ink);
+  border-bottom: 1px solid var(--ink);
+  padding-bottom: 2px;
+  background: none;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  transition: color .15s ease, border-color .15s ease;
+}
+
+.tag-cta:hover {
+  color: var(--amber-deep);
+  border-color: var(--amber-deep);
 }

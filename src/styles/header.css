@@ -1,45 +1,154 @@
 /* ============================================================
-   HEADER + UTILITY BAR
+   HEADER + UTILITY BAR — "Front Fascia" redesign
    Owned by: Person A
    Imported in: components/Header.jsx
+   Signature: a chrome-grille main nav, a circular badge-emblem
+   logo, and a push-button ignition CTA — the car's front fascia,
+   not another gauge cluster (that's Listing's language). Mobile
+   menu is a keyfob popover anchored under its trigger, never a
+   full-height side drawer.
    ============================================================ */
 
-.util-bar{background:#0b0f14; border-bottom:1px solid rgba(255,255,255,0.06);}
-.util-bar-inner{max-width:1180px; margin:0 auto; display:flex; justify-content:flex-end; gap:22px; padding:7px 24px; flex-wrap:wrap;}
-.util-bar a{font-size:10.5px; letter-spacing:1px; text-transform:uppercase; color:#6b7580; transition:color .15s ease;}
-.util-bar a:hover{color:var(--amber);}
+/* ---------- Plate strip (utility bar) ---------- */
+.plate-strip{background:#0b0f14; border-bottom:1px solid rgba(255,255,255,0.06);}
+.plate-strip-inner{
+  max-width:1180px; margin:0 auto; padding:7px 24px;
+  display:flex; align-items:center; justify-content:space-between; gap:12px 20px; flex-wrap:wrap;
+}
 
+.plate{
+  display:flex; align-items:center; gap:8px; flex:none;
+  padding:3px 10px 3px 8px; border-radius:3px;
+  border:1px solid rgba(255,255,255,0.16);
+  background:linear-gradient(180deg, rgba(255,255,255,0.04), rgba(0,0,0,0.2));
+}
+.plate .dot{width:6px; height:6px; border-radius:50%; background:var(--sky); box-shadow:0 0 8px var(--sky); animation:visitorPulse 1.8s ease-in-out infinite; flex:none;}
+.plate .plate-count{color:#fff; font-weight:700; font-size:11px; letter-spacing:1px; font-family:'Space Mono'; animation:rollIn .4s ease;}
+.plate .plate-label{font-size:10px; letter-spacing:.5px; color:#6b7580; text-transform:uppercase;}
+@keyframes visitorPulse{0%,100%{opacity:1;} 50%{opacity:.35;}}
+@keyframes rollIn{from{opacity:0; transform:translateY(-5px);} to{opacity:1; transform:none;}}
+
+.plate-links{display:flex; gap:22px; flex-wrap:wrap;}
+.plate-links a{font-size:10.5px; letter-spacing:1px; text-transform:uppercase; color:#6b7580; transition:color .15s ease; cursor:pointer;}
+.plate-links a:hover{color:var(--amber);}
+
+/* ---------- Main header ---------- */
 header{position:sticky; top:0; z-index:60; background:var(--ink); border-bottom:1px solid rgba(255,255,255,0.08);}
-.header-inner{max-width:1180px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; padding:14px 24px; gap:20px;}
-.logo-group{display:flex; align-items:center; gap:14px;}
-.logo{display:flex; align-items:baseline; gap:2px; font-family:'Oswald'; font-size:21px; font-weight:700; letter-spacing:1px; color:#fff; text-transform:uppercase;}
-.logo span{color:var(--amber);}
-nav.main-nav{display:flex; gap:26px; transition:opacity .3s ease;}
-nav.main-nav a{font-size:12.5px; letter-spacing:1.5px; text-transform:uppercase; color:#c7ced6; font-weight:500; position:relative; padding:6px 0; transition:color .15s ease;}
-nav.main-nav a:hover{color:#fff;}
-nav.main-nav a.active{color:var(--amber);}
-nav.main-nav a.active::after{content:''; position:absolute; left:0; right:0; bottom:-4px; height:2px; background:var(--amber);}
-.header-right{display:flex; align-items:center; gap:16px;}
-.visitor-count{font-family:'Space Mono'; font-size:10.5px; color:#8a94a0; display:flex; align-items:center; gap:6px; white-space:nowrap; border-left:1px solid rgba(255,255,255,0.12); padding-left:14px;}
-.visitor-count .dot{width:6px;height:6px;border-radius:50%;background:var(--sky); box-shadow:0 0 8px var(--sky);}
-.cta-btn{background:var(--amber); color:var(--ink); font-weight:600; font-size:12.5px; letter-spacing:.5px; padding:9px 18px; border-radius:2px; border:none; transition:background .15s ease; white-space:nowrap;}
-.cta-btn:hover{background:var(--amber-deep);}
-.burger{display:none; background:none; border:none; color:#fff; font-size:20px;}
+.grille-header-inner{max-width:1180px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; padding:12px 24px; gap:20px;}
 
-/* ---------- MOBILE NAV (fade in/out) ---------- */
+/* Badge-emblem logo, like a hood ornament lockup */
+.badge-group{display:flex; align-items:center; gap:11px; background:none; border:none; padding:0; cursor:pointer;}
+.badge-emblem{
+  position:relative; width:38px; height:38px; border-radius:50%; flex:none;
+  background:radial-gradient(circle at 34% 30%, #232b34, var(--ink) 70%);
+  border:1.5px solid rgba(255,255,255,0.18);
+  display:flex; align-items:center; justify-content:center;
+  box-shadow:inset 0 0 0 1px rgba(0,0,0,0.4), 0 2px 6px rgba(0,0,0,0.4);
+}
+.badge-emblem::before{
+  content:''; position:absolute; inset:4px; border-radius:50%;
+  border:1px solid rgba(242,169,59,0.5);
+}
+.badge-emblem span{font-family:'Oswald'; font-weight:700; font-size:13px; color:var(--amber); letter-spacing:.5px;}
+.logo-lockup{display:flex; flex-direction:column; align-items:flex-start; gap:1px;}
+.logo-lockup .logo{display:flex; align-items:baseline; gap:2px; font-family:'Oswald'; font-size:19px; font-weight:700; letter-spacing:1px; color:#fff; text-transform:uppercase;}
+.logo-lockup .logo span{color:var(--amber);}
+.logo-lockup .logo-sub{font-size:8.5px; letter-spacing:2.5px; color:#5b6672; text-transform:uppercase;}
+
+/* Chrome-grille main nav — vertical slats between links, an amber
+   LED bar lighting under the active/hovered slat instead of a dot */
+nav.grille-nav{display:flex; align-items:stretch; gap:0;}
+nav.grille-nav a{
+  position:relative; display:flex; align-items:center;
+  font-size:12px; letter-spacing:1.5px; text-transform:uppercase; color:#c7ced6; font-weight:500;
+  padding:8px 18px; transition:color .15s ease; cursor:pointer;
+}
+nav.grille-nav a + a{border-left:1px solid rgba(255,255,255,0.09);}
+nav.grille-nav a::after{
+  content:''; position:absolute; left:18px; right:18px; bottom:2px; height:2px; border-radius:2px;
+  background:transparent; transition:background .2s ease, box-shadow .2s ease;
+}
+nav.grille-nav a:hover{color:#fff;}
+nav.grille-nav a:hover::after{background:rgba(255,255,255,0.25);}
+nav.grille-nav a.active{color:var(--amber);}
+nav.grille-nav a.active::after{background:var(--amber); box-shadow:0 0 6px var(--amber);}
+
+.header-right{display:flex; align-items:center; gap:14px; position:relative;}
+
+/* Push-button ignition CTA */
+.ignition-btn{
+  display:flex; align-items:center; gap:9px;
+  background:none; border:1px solid rgba(255,255,255,0.16); border-radius:22px;
+  padding:7px 18px 7px 8px; color:#fff; font-weight:600; font-size:12px; letter-spacing:.4px;
+  transition:border-color .15s ease, background .15s ease, transform .08s ease; white-space:nowrap;
+}
+.ignition-btn .ignition-ring{
+  width:22px; height:22px; border-radius:50%; flex:none;
+  border:1.5px solid var(--amber); display:flex; align-items:center; justify-content:center;
+  color:var(--amber); transition:box-shadow .2s ease;
+}
+.ignition-btn .ignition-ring svg{width:10px; height:10px;}
+.ignition-btn:hover{border-color:var(--amber); background:rgba(242,169,59,0.08);}
+.ignition-btn:hover .ignition-ring{box-shadow:0 0 10px rgba(242,169,59,0.6);}
+.ignition-btn:active{transform:scale(.96);}
+
+/* Keyfob trigger — replaces the burger. A small remote body with
+   two "buttons"; an amber unlock-ring appears while the popover is open */
+.fob-trigger{
+  display:none; position:relative; width:38px; height:38px; border-radius:50%;
+  background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.14);
+  align-items:center; justify-content:center; color:#c7ced6;
+  transition:border-color .2s ease, color .2s ease;
+}
+.fob-trigger svg{width:16px; height:16px;}
+.fob-trigger.is-open{border-color:var(--amber); color:var(--amber);}
+.fob-trigger::after{
+  content:''; position:absolute; inset:-4px; border-radius:50%; border:1px solid rgba(242,169,59,0.5);
+  opacity:0; transform:scale(.8); transition:opacity .3s ease, transform .3s ease; pointer-events:none;
+}
+.fob-trigger.is-open::after{opacity:1; transform:scale(1);}
+
+/* ---------- Keyfob popover (mobile nav) ---------- */
+.fob-popover{
+  position:absolute; top:calc(100% + 12px); right:0; z-index:65; width:250px;
+  background:linear-gradient(160deg, var(--ink-soft) 0%, var(--ink) 100%);
+  border:1px solid rgba(255,255,255,0.1); border-radius:10px;
+  box-shadow:0 24px 48px rgba(0,0,0,0.45);
+  padding:10px; transform-origin:top right;
+  opacity:0; transform:scale(.94) translateY(-6px); pointer-events:none;
+  transition:opacity .18s ease, transform .18s ease;
+}
+.fob-popover.is-open{opacity:1; transform:none; pointer-events:auto;}
+.fob-popover::before{
+  content:''; position:absolute; top:-6px; right:20px; width:11px; height:11px;
+  background:var(--ink-soft); border-left:1px solid rgba(255,255,255,0.1); border-top:1px solid rgba(255,255,255,0.1);
+  transform:rotate(45deg);
+}
+
+.fob-nav-list{display:flex; flex-direction:column; gap:2px;}
+.fob-nav-list a{
+  display:flex; align-items:center; gap:10px; cursor:pointer;
+  padding:11px 12px; border-radius:6px; color:#c7ced6; font-size:13.5px; font-weight:500;
+  transition:background .15s ease, color .15s ease;
+}
+.fob-nav-list a .fob-led{width:6px; height:6px; border-radius:50%; background:rgba(255,255,255,0.2); flex:none; transition:background .15s ease, box-shadow .15s ease;}
+.fob-nav-list a:hover{background:rgba(255,255,255,0.05); color:#fff;}
+.fob-nav-list a.active{color:var(--amber);}
+.fob-nav-list a.active .fob-led{background:var(--amber); box-shadow:0 0 6px var(--amber);}
+
+.fob-divider{height:1px; background:rgba(255,255,255,0.08); margin:8px 4px;}
+
+.fob-popover .ignition-btn{width:100%; justify-content:center; margin-top:2px;}
+
+/* ---------- MOBILE ---------- */
 @media (max-width:860px){
-  .visitor-count{ display:none; }
-  .header-right{ gap:10px; }
-  .cta-btn{ padding:8px 12px; font-size:11px; }
-  nav.main-nav{
-    display:flex; position:fixed; top:96px; left:0; right:0; bottom:0;
-    background:var(--ink); flex-direction:column; align-items:flex-start;
-    padding:30px 28px; gap:0;
-    opacity:0; pointer-events:none; transform:translateY(-8px);
-    transition:opacity .3s ease, transform .3s ease;
-    z-index:55;
-  }
-  nav.main-nav.menu-open{opacity:1; pointer-events:auto; transform:none;}
-  nav.main-nav a{font-size:16px; padding:14px 0; width:100%; border-bottom:1px solid rgba(255,255,255,0.06);}
-  .burger{display:block;}
+  .plate-strip-inner{padding:6px 16px;}
+  .plate .plate-label{display:none;}
+  .plate-links{gap:14px;}
+
+  .header-right .ignition-btn{display:none;}
+  .header-right{gap:10px;}
+
+  nav.grille-nav{display:none;}
+  .fob-trigger{display:flex;}
 }

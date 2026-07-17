@@ -1,0 +1,121 @@
+/* ============================================================
+   FAQ — "Owner's Manual Index"
+   Owned by: Person D
+   Imported in: components/FAQ.jsx
+   Signature: numbered accordion rows with a tab-style index chip, read
+   as a manual's table of contents rather than a generic FAQ widget.
+   ============================================================ */
+
+.faq-section {
+  max-width: 1180px;
+}
+
+.faq-list {
+  max-width: 760px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.faq-item {
+  background: #fff;
+  border: 1px solid var(--paper-dim);
+  border-radius: 2px;
+  transition: border-color .2s ease, box-shadow .2s ease;
+}
+
+.faq-item.open {
+  border-color: rgba(216, 143, 31, 0.4);
+  box-shadow: 0 10px 24px rgba(16, 21, 28, 0.08);
+}
+
+.faq-q {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 18px 20px;
+  background: none;
+  border: none;
+  text-align: left;
+}
+
+.faq-index {
+  flex: none;
+  font-size: 11px;
+  letter-spacing: .5px;
+  color: var(--amber-deep);
+  border: 1px solid rgba(216, 143, 31, 0.4);
+  border-radius: 2px;
+  padding: 4px 7px;
+  transition: background .2s ease, color .2s ease;
+}
+
+.faq-item.open .faq-index {
+  background: var(--amber);
+  color: var(--ink);
+  border-color: var(--amber);
+}
+
+.faq-q-text {
+  flex: 1;
+  font-family: 'Oswald';
+  font-size: 14.5px;
+  letter-spacing: .3px;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+
+.faq-chevron {
+  flex: none;
+  color: var(--steel);
+  font-size: 16px;
+  transition: transform .25s ease, color .25s ease;
+}
+
+.faq-item.open .faq-chevron {
+  transform: rotate(180deg);
+  color: var(--amber-deep);
+}
+
+.faq-a-wrap {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows .35s ease;
+}
+
+.faq-item.open .faq-a-wrap {
+  grid-template-rows: 1fr;
+}
+
+.faq-a-inner {
+  overflow: hidden;
+}
+
+.faq-a {
+  padding: 0 20px 20px 62px;
+}
+
+.faq-a p {
+  font-size: 13.5px;
+  line-height: 1.65;
+  color: var(--steel);
+  text-transform: none;
+  max-width: 560px;
+}
+
+@media (max-width: 640px) {
+  .faq-q {
+    gap: 12px;
+    padding: 15px 16px;
+  }
+
+  .faq-q-text {
+    font-size: 13px;
+  }
+
+  .faq-a {
+    padding: 0 16px 18px 46px;
+  }
+}

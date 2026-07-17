@@ -3,6 +3,7 @@ import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Ticker from "./components/Ticker";
 import Modal from "./components/Modal";
+import PaymentModal from "./components/PaymentModal";
 import Toast from "./components/Toast";
 import Home from "./views/Home";
 import Listing from "./views/Listing";
@@ -20,6 +21,7 @@ export default function App() {
   const [view, setView] = useState("home");
   const [menuOpen, setMenuOpen] = useState(false);
   const [modalCarId, setModalCarId] = useState(null);
+  const [paymentCarId, setPaymentCarId] = useState(null);
   const [toastMsg, setToastMsg] = useState("");
   const [visitorCount, setVisitorCount] = useState(12408);
 
@@ -29,6 +31,21 @@ export default function App() {
   };
   const openModal = (id) => setModalCarId(id);
   const closeModal = () => setModalCarId(null);
+
+  // "Reserve This Car" inside Modal opens the PaymentModal on top of it,
+  // without losing the underlying car detail modal.
+  const openPayment = (car) => setPaymentCarId(car.id);
+  const closePayment = () => setPaymentCarId(null);
+
+  const confirmPayment = (car, method) => {
+    closePayment();
+    closeModal();
+    showToast(
+      method === "finance"
+        ? `Finance application received for ${car.name} — an advisor will call within 24h.`
+        : `Reservation confirmed for ${car.name} — check your email for next steps.`
+    );
+  };
 
   const showToast = (msg) => {
     setToastMsg(msg);
@@ -44,6 +61,7 @@ export default function App() {
   }, []);
 
   const modalCar = modalCarId ? CARS.find((c) => c.id === modalCarId) : null;
+  const paymentCar = paymentCarId ? CARS.find((c) => c.id === paymentCarId) : null;
 
   return (
     <>
@@ -86,7 +104,13 @@ export default function App() {
 
       <Footer goto={goto} />
       <Ticker />
-      <Modal car={modalCar} onClose={closeModal} />
+      <Modal
+        car={modalCar}
+        onClose={closeModal}
+        onBuy={openPayment}
+        onOpenCar={openModal}
+      />
+      <PaymentModal car={paymentCar} onClose={closePayment} onConfirm={confirmPayment} />
       <Toast message={toastMsg} />
     </>
   );

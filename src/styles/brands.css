@@ -2,9 +2,249 @@
    BRANDS TAB
    Owned by: Person D
    Imported in: views/Brands.jsx
+   Signature: "Tuner Console" — an FM-dial brand selector (frequency
+   strip + numbered presets) with a signal-strength result meter,
+   styled as a car-radio head unit. Reuses the site's bolt/panel
+   vocabulary from Listing's ignition panel, but the instrument itself
+   (a horizontal tuning dial, not a circular gauge) is unique to this page.
    ============================================================ */
 
-.brand-select-row{display:flex; gap:10px; flex-wrap:wrap; margin-bottom:32px;}
-.brand-btn{background:#fff; border:1px solid var(--paper-dim); padding:12px 22px; font-family:'Oswald'; font-size:13px; letter-spacing:1.5px; color:var(--steel); transition:all .15s ease;}
-.brand-btn:hover{border-color:var(--ink); color:var(--ink);}
-.brand-btn.active{background:var(--ink); color:#fff; border-color:var(--ink);}
+/* ---------- Hero deco ---------- */
+.brands-hero {
+  overflow: hidden;
+}
+
+.brands-hero .antenna-deco {
+  position: absolute;
+  top: 0;
+  right: 12px;
+  width: 160px;
+  height: 160px;
+  z-index: 1;
+  opacity: .8;
+  pointer-events: none;
+}
+
+@media (max-width:640px) {
+  .brands-hero .antenna-deco {
+    width: 110px;
+    height: 110px;
+    opacity: .55;
+  }
+}
+
+/* ---------- Tuner console shell ---------- */
+.tuner-console {
+  position: relative;
+  margin-top: -46px;
+  z-index: 6;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 26px 30px 24px;
+  background:
+    repeating-linear-gradient(115deg, rgba(255, 255, 255, 0.028) 0 2px, transparent 2px 7px),
+    linear-gradient(160deg, var(--ink-soft) 0%, var(--ink) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
+  box-shadow: 0 24px 48px rgba(11, 14, 18, 0.35);
+}
+
+/* ---------- FM frequency strip ---------- */
+.tuner-strip-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.tuner-strip {
+  position: relative;
+  height: 34px;
+  background: #0b0f14;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.tuner-scale {
+  position: absolute;
+  inset: 0;
+}
+
+.tuner-tick {
+  position: absolute;
+  bottom: 0;
+  width: 1px;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.18);
+  transform: translateX(-50%);
+}
+
+.tuner-tick.major {
+  height: 14px;
+  width: 1.5px;
+  background: rgba(255, 255, 255, 0.32);
+}
+
+.tuner-needle {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--sky);
+  box-shadow: 0 0 8px rgba(92, 201, 224, 0.85);
+  transform: translateX(-50%);
+  transition: left .45s cubic-bezier(.22, .9, .24, 1);
+}
+
+.tuner-needle::before {
+  content: '';
+  position: absolute;
+  top: -4px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 6px solid var(--sky);
+}
+
+.tuner-readout {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  font-size: 12.5px;
+}
+
+.tuner-freq {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--amber);
+  text-shadow: 0 0 8px rgba(242, 169, 59, 0.55);
+}
+
+.tuner-unit {
+  color: #6b7580;
+  letter-spacing: 1px;
+}
+
+.tuner-station {
+  color: #c7ced6;
+  letter-spacing: .3px;
+}
+
+/* ---------- Preset buttons ---------- */
+.preset-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.preset-btn {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  padding: 10px 14px;
+  font-family: 'Oswald';
+  font-size: 12.5px;
+  letter-spacing: .5px;
+  color: #aab2bc;
+  transition: all .15s ease;
+}
+
+.preset-btn:hover {
+  border-color: rgba(255, 255, 255, 0.28);
+  color: #fff;
+}
+
+.preset-btn.active {
+  background: linear-gradient(180deg, var(--amber), var(--amber-deep));
+  border-color: var(--amber);
+  color: var(--ink);
+  font-weight: 600;
+  box-shadow: 0 0 14px rgba(242, 169, 59, 0.35);
+}
+
+.preset-num {
+  font-size: 10px;
+  color: #6b7580;
+}
+
+.preset-btn.active .preset-num {
+  color: rgba(16, 21, 28, 0.6);
+}
+
+.preset-led {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.preset-btn.active .preset-led {
+  background: var(--ink);
+  box-shadow: 0 0 4px rgba(16, 21, 28, 0.5);
+}
+
+/* ---------- Result row + signal meter ---------- */
+.brand-result-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 24px 0 30px;
+  padding: 10px 18px;
+  background: #fff;
+  border: 1px solid var(--paper-dim);
+  border-radius: 6px;
+}
+
+.result-count {
+  font-size: 12px;
+  letter-spacing: .5px;
+  color: var(--steel);
+  text-transform: uppercase;
+}
+
+.signal-meter {
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+}
+
+.signal-bar {
+  width: 5px;
+  border-radius: 1px;
+  background: var(--paper-dim);
+  transition: background .2s ease;
+}
+
+.signal-bar.lit {
+  background: var(--amber);
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width:860px) {
+  .tuner-console {
+    margin-top: -30px;
+    padding: 22px 20px 20px;
+  }
+}
+
+@media (max-width:520px) {
+  .preset-row {
+    gap: 6px;
+  }
+
+  .preset-btn {
+    flex: 1 1 calc(50% - 6px);
+    justify-content: center;
+  }
+
+  .brand-result-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+}
